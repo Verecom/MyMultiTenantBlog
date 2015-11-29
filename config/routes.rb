@@ -1,6 +1,24 @@
+class SubdomainConstraint
+  def self.matches?(request)
+    subdomains = %w( www admin )
+    request.subdomain.present? && !subdomains.include?(request.subdomain)
+  end
+end
+
+class MaindomainConstraint
+  def self.matches?(request)
+    subdomains = %w( www admin )
+    !request.subdomain.present? || subdomains.include?(request.subdomain)
+  end
+end
+
 Rails.application.routes.draw do
-  resources :blogs
-  devise_for :users
+  constraints SubdomainConstraint do
+  end
+  constraints MaindomainConstraint do
+    resources :blogs
+    devise_for :users
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
