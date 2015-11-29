@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129154446) do
+ActiveRecord::Schema.define(version: 20151129170021) do
+
+  create_table "blogs", force: :cascade do |t|
+    t.string   "slug"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "blogs", ["slug"], name: "index_blogs_on_slug"
+
+  create_table "blogs_users", id: false, force: :cascade do |t|
+    t.integer "blog_id"
+    t.integer "user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
