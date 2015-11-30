@@ -5,13 +5,20 @@ class Ability
     # Define abilities for the passed in user here. For example:
     #
     # user ||= User.new # guest user (not logged in)
+    current_blog = Blog.find_by(slug: Apartment::Tenant.current)
+
     if user
       can [:read, :create], Blog
       can [:update, :destroy], Blog do |blog|
         blog.users.include? user
       end
+      can :read, Post
+      if current_blog.users.include? user
+        can [:create, :update, :destroy], Post
+      end
     else
       can :read, Blog
+      can :read, Post
     end
     #
     # The first argument to `can` is the action you are giving the user
